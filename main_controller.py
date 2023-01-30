@@ -1,5 +1,5 @@
-import asyncio, time, datetime, games, json, threading, jinja2, leagues, os, leagues, gametext, logging
-from leagues import league_structure
+import asyncio, time, datetime, game, json, threading, jinja2, league, os, league, gametext, logging
+from league import League
 from league_storage import league_exists
 from flask import Flask, url_for, Response, render_template, request, jsonify, send_from_directory, abort
 from flask_socketio import SocketIO, emit
@@ -81,7 +81,7 @@ def create_league():
                     return jsonify({'status':'err_duplicate_team', 'cause':team_name}), 400
                 all_teams.add(team_name)
                 
-                team = games.get_team(team_name)
+                team = game.get_team(team_name)
                 if team is None:
                     err_teams.append(team_name)
                 else:
@@ -100,7 +100,7 @@ def create_league():
         if config[key] < min_val:
             return jsonify({'status':'err_invalid_option_value', 'cause':key}), 400
 
-    new_league = league_structure(config['name'])
+    new_league = League(config['name'])
     new_league.setup(
         league_dic, 
         division_games=config['division_series'],
@@ -110,7 +110,7 @@ def create_league():
     new_league.constraints["division_leaders"] = config["top_postseason"]
     new_league.constraints["wild_cards"] = config["wildcards"]
     new_league.generate_schedule()
-    leagues.save_league(new_league)
+    league.save_league(new_league)
 
     return jsonify({'status':'success_league_created'})
 

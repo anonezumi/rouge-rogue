@@ -1,7 +1,7 @@
-# matteo-the-prestige
+# rouge-rogue
 # sim16 + discord bot: baseball simulation
 
-Sim16 is a discord and website based online baseball simulator, every name has randomly generated stats which you can use to make custom teams and custom leagues, all created and set up in discord and watchable at http://sim16.Sakimori.space! 
+Sim16 is a discord and website based online baseball simulator, every name has randomly generated stats which you can use to make custom teams and custom leagues, all created and set up in discord!
 
 If you would like to add the bot to your server to be able to set up teams and games, you can do so with this link: https://discord.com/api/oauth2/authorize?client_id=789956166796574740&permissions=388160&scope=bot
 
@@ -27,11 +27,8 @@ Accepting pull requests, check the issues for to-dos, if you have an idea for an
 	- [League Commands](https://github.com/Sakimori/matteo-the-prestige#league-commands)	
   - [Player Commands](https://github.com/Sakimori/matteo-the-prestige#player-commands)
     - [General Player Commands](https://github.com/Sakimori/matteo-the-prestige#general-player-commands)
-    - [Archetpe Commands](https://github.com/Sakimori/matteo-the-prestige#archetype-commands)
   - [Other Commands](https://github.com/Sakimori/matteo-the-prestige#other-commands)
-* [Archetypes](https://github.com/Sakimori/matteo-the-prestige#archetypes)
 * [Weathers](https://github.com/Sakimori/matteo-the-prestige#weathers)
-* [Patreon](https://github.com/Sakimori/matteo-the-prestige#patreon)
 * [Attribution](https://github.com/Sakimori/matteo-the-prestige#attribution)
   
 ## FAQ:

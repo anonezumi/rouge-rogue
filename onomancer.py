@@ -27,7 +27,9 @@ def _retry_session(retries=3, backoff=0.3, status=(500, 501, 502, 503, 504)):
 
 def get_stats(name):
     player = db.get_stats(name)
+    print(name)
     if player is not None:
+        print("The player is realllll")
         return player #returns json_string
 
     #yell at onomancer if not in cache or too old
@@ -36,24 +38,8 @@ def get_stats(name):
         stats = json.dumps(response.json())
         db.cache_stats(name, stats)
         return stats
-
-def get_scream(username):
-    scream = db.get_soulscream(username)
-    if scream is not None:
-        return scream
     else:
-        scream = json.loads(get_stats(username))["soulscream"]
-        db.cache_soulscream(username, scream)
-        return scream
-
-def get_collection(collection_url):
-    response = _retry_session().get(onomancer_url + collection_hook + urllib.parse.quote(collection_url))
-    if response.status_code == 200:
-        for player in response.json()['lineup'] + response.json()['rotation']:
-            db.cache_stats(player['name'], json.dumps(player))
-
-        return json.dumps(response.json())
-
+        print(response)
 
 def get_names(limit=20, threshold=1):
     """

@@ -1,4 +1,4 @@
-import random, math, roman
+import random, math
 from gametext import appearance_outcomes, game_strings_base, base_string
 
 class Weather:
@@ -419,7 +419,7 @@ class Downpour(Weather):
 
     def __init__(self, game):
         self.target = game.max_innings
-        self.name = f"Torrential Downpour: {roman.roman_convert(str(self.target))}"
+        self.name = f"Torrential Downpour: {self.target}"
         self.emoji = '⛈'
         
 
@@ -490,7 +490,7 @@ class LeafEddies(Weather):
     
 
     def __init__(self, game):
-        self.name = f"Leaf Eddies: {roman.roman_convert(str(game.max_innings*3))}"
+        self.name = f"Leaf Eddies: {game.max_innings*3}"
         self.original_innings = game.max_innings
         game.max_innings = 1
         self.inning_text = "The umpires have remembered their jobs. They shoo the defenders off the field!"
@@ -525,7 +525,7 @@ class LeafEddies(Weather):
                 game.outs = 0
                 self.sent = False
                 if self.out_counter < (self.original_innings * 3):
-                    self.name = f"Leaf Eddies: {roman.roman_convert(str(self.original_innings*3-self.out_counter))}"
+                    self.name = f"Leaf Eddies: {self.original_innings*3-self.out_counter}"
                 else:
                     self.name = "Leaf Eddies"
                     self.out_counter = 0
@@ -539,7 +539,7 @@ class LeafEddies(Weather):
     def modify_top_of_inning_message(self, game, state):
         state["update_emoji"] = self.emoji
         if game.inning == 1:
-            self.name = f"Leaf Eddies: {roman.roman_convert(str(self.original_innings*3-self.out_counter))}"
+            self.name = f"Leaf Eddies: {self.original_innings*3-self.out_counter}"
         else:
             self.name = "Leaf Eddies: Golden Run"
             state["update_emoji"] = "⚠"
