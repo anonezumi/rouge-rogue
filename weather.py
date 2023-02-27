@@ -1,5 +1,4 @@
 import random, math
-from gametext import appearance_outcomes, game_strings_base, base_string
 
 class Weather:
     name = "Sunny"
@@ -8,7 +7,7 @@ class Weather:
     out_extension = False
 
     def __init__(self, game):
-        pass    
+        pass
 
     def __str__(self):
         return f"{self.emoji} {self.name}"
@@ -49,19 +48,14 @@ class Weather:
     def modify_top_of_inning_message(self, game, state):
         pass
 
-    def modify_atbat_message(self, game, state):
-        pass
+    def modify_atbat_message(self, game, update_text):
+        return update_text
 
     def modify_gamestate(self, game, state):
         pass
 
     def modify_game_end_message(self, game, state):
         pass
-
-    def weather_report(self, game, state):
-        game.weather = random.choice(list(safe_weathers().values()))(game)
-        state["update_emoji"] = "🚌"
-        state["update_text"] += f" Weather report: {game.weather.name} {game.weather.emoji}"
 
 
 class Supernova(Weather):
@@ -123,7 +117,7 @@ class Starlight(Weather):
 
 
     def modify_atbat_message(self, game, state):
-        result = game.last_update[0]
+        result = game.last_update
         if "in_the_park" in result.keys():
             state["update_text"] = f"The stars are pleased with {result['batter']}, and allow a dinger! {game.last_update[1]} runs scored!"
         elif "dragin_the_park" in result.keys():
@@ -430,9 +424,6 @@ class Downpour(Weather):
         else:
             game.max_innings = game.inning + 1
 
-    def modify_gamestate(self, game, state):
-        state["max_innings"] = "∞"
-
     def modify_top_of_inning_message(self, game, state):
         state["update_emoji"] = self.emoji
         if game.teams["away"].score >= self.target: #if the away team has met the target
@@ -547,10 +538,6 @@ class LeafEddies(Weather):
         state["update_text"] = self.inning_text
         state["weather_text"] = self.name
 
-    def modify_atbat_message(self, game, state):
-        if game.inning == 1:
-            state["weather_text"] = self.name
-
 class Smog(Weather):
     name = "Smog"
     emoji = "🚌"
@@ -632,7 +619,8 @@ def all_weathers():
             "Leaf Eddies" : LeafEddies,
             "Smog" : Smog,
             "Dusk" : Dusk,
-            "Runoff" :  Runoff
+            "Runoff" :  Runoff,
+            "Sunny" : Weather
         }
     return weathers_dic
 
@@ -651,7 +639,8 @@ def safe_weathers():
             "Hurricane" : Hurricane,
             "Tornado" : Tornado,
             "Summer Mist" : SummerMist,
-            "Dusk" : Dusk
+            "Dusk" : Dusk,
+            "Sunny" : Weather
         }
     return weathers_dic
 

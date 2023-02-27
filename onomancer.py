@@ -29,7 +29,6 @@ def get_stats(name):
     player = db.get_stats(name)
     print(name)
     if player is not None:
-        print("The player is realllll")
         return player #returns json_string
 
     #yell at onomancer if not in cache or too old
