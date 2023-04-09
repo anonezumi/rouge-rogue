@@ -6,6 +6,7 @@
         "strikeoutswinging": ["{0.batter} strikes out swinging."],
         "groundout": ["{0.batter} grounds out to {0.defender}."],
         "flyout": ["{0.batter} flies out to {0.defender}."],
+        "flyoutadvance": ["{0.batter} flies out to {0.defender}, but {0.runner} advances."],
         "fielderschoice": ["{0.batter} reaches on fielder's choice. {0.runner} is out at {0.base_string} base."] ,
         "doubleplay": ["{0.batter} grounds into a double play!"],
         "sacrifice": ["{0.batter} hits a sacrifice fly towards {0.defender}."],
@@ -16,7 +17,7 @@
         "homerun": ["{0.batter} hits a dinger!"],
         "grandslam": ["{0.batter} hits a grand slam!"],
         "steal_caught": ["{0.runner} was caught stealing {0.base_string} base by {0.defender}!"],
-        "steal_success": ["{0.runner} steals {} base!"]
+        "steal_success": ["{0.runner} steals {0.base_string} base!"]
     },
     {
         "name": "New Guy",
@@ -39,6 +40,7 @@
             ["{0.batter} absolutely SMASHES that ball! It's gone!","Woah, hold on, nevermind. It looks like {0.defender} jumped up and grabbed it!"],
             "{0.batter} bops the ball up in the air and over to {0.defender}. Worth a go, I guess?",
             ["{0.batter} winds up a real heavy hit, and the ball goes really fast!", "Not fast enough to faze {0.defender}, though, who does a spectacular leap over and nabs it out of the air."]],
+        "flyoutadvance": ["{0.defender} caught the ball, but {0.runner} still got to the next base? Is that allowed?"],
         "fielderschoice": ["{0.batter} whacks the ball over to the left side of the baseball triangle, where {0.defender} sends {0.fc_out} back to their pit. {0.batter}'s on base, though!",
             ["{0.batter} hits the ball onto the ground, where it rolls over to the second-and-a-half-base guard. They put a stop to {0.fc_out}'s running, but they forgot about {0.batter}!"]],
         "doubleplay": [["{0.batter} hits the ball over to {0.defender}, who picks it up and stops that runner at second.", "And they're not done! They toss it to first and get {0.batter} out, too. Yikes."],
@@ -85,6 +87,7 @@
             ["{0.batter} hits a high fly into right field--", "{0.defender} dives-- and gets it! {0.batter} is out!"],
             "{0.batter} hits the ball deep into left field-- but {0.defender} says it's not gonna be that easy, and robs them of a home run!",
             ["{0.batter} hits a high fly into right field--", "but {0.defender} dives into the stands to catch it! I've seen it, and I still don't believe what I just witnessed!"]],
+        "flyoutadvance": ["{0.batter} flies out to {0.defender}, but {0.runner} advances."],
         "fielderschoice": ["{0.batter} hits it hard on the ground-- tough play. {0.batter} reaches on fielder's choice!",
             "{0.batter} hits that one shallow, and {0.defender}'s made their choice: {0.runner} is outta here, but {0.defender} reaches!"],
         "doubleplay": ["{0.batter} grounds out into the double play! We really do hate to see it.",

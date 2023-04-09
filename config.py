@@ -1,6 +1,26 @@
 import discord, os, json
+from enum import Enum
 
 DATA_DIR = "data"
+
+all_voices = json.load(open("voices.json"))
+base_string = ["None", "first", "second", "third", "home"]
+
+class Outcome(Enum):
+    K_LOOKING = "strikeoutlooking"
+    K_SWINGING = "strikeoutswinging"
+    GROUNDOUT = "groundout"
+    FLYOUT = "flyout"
+    FLYOUT_ADVANCE = "flyoutadvance"
+    FIELDERS_CHOICE = "fielderschoice"
+    DOUBLE_PLAY = "doubleplay"
+    SAC_FLY = "sacrifice"
+    WALK = "walk"
+    SINGLE = "single"
+    DOUBLE = "double"
+    TRIPLE = "triple"
+    HOME_RUN = "homerun"
+    GRAND_SLAM = "grandslam"
 
 client = discord.Client(intents=(discord.Intents.all()))
 config_filename = os.path.join(DATA_DIR, "config.json")

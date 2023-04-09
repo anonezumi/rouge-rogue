@@ -82,6 +82,6 @@ Discord is also the ideal place for suggestions, bug reports, and questions abou
   - Dusk 🌆: New patch weather, its effects will be revealed next time a new weather in implemented.
 
 ## Credit
-The original project is [Sim16](https://github.com/Sakimori/matteo-the-prestige), created Sakimori and other contributors, and supported by her Patreon. Inspiration was taken from [Blaseball](https://blaseball.com/) and Out of the Park Baseball. The stats system is based on [blaseball-mike](https://github.com/jmaliksi/blaseball-mike).
+The original project is [Sim16](https://github.com/Sakimori/matteo-the-prestige), created by Sakimori and other contributors, and supported by her Patreon. Inspiration was taken from [Blaseball](https://blaseball.com/) and Out of the Park Baseball. The stats system is based on [blaseball-mike](https://github.com/jmaliksi/blaseball-mike).
 
 This code is licensed under GNU GPL v3, which means you may use, edit, and distribute the code as you wish, as long as you offer others the same freedoms for your version. No warranty is provided for the software. The full license can be viewed at LICENSE.md.

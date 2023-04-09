@@ -1,27 +1,8 @@
 import random, math, weather, player, team, discord, asyncio, json, time
 import database as db
-from client import config
-from enum import Enum
+from config import config, all_voices, base_string, Outcome
 
 gamesarray = []
-all_voices = json.load(open("voices.json"))
-base_string = ["None", "first", "second", "third", "home"]
-
-class Outcome(Enum):
-    K_LOOKING = "strikeoutlooking"
-    K_SWINGING = "strikeoutswinging"
-    GROUNDOUT = "groundout"
-    FLYOUT = "flyout"
-    FLYOUT_ADVANCE = "flyout_advance"
-    FIELDERS_CHOICE = "fielderschoice"
-    DOUBLE_PLAY = "doubleplay"
-    SAC_FLY = "sacrifice"
-    WALK = "walk"
-    SINGLE = "single"
-    DOUBLE = "double"
-    TRIPLE = "triple"
-    HOME_RUN = "homerun"
-    GRAND_SLAM = "grandslam"
 
 class Update():
     def __init__(self):
@@ -31,9 +12,11 @@ class Update():
         self.pitcher = None
         self.defender = None
         self.displaytext = ""
+        self.emoji = ""
         self.offense_team = None
         self.defense_team = None
         self.runner = None
+        self.text_only = False
 
 class Game(object):
     def __init__(self, team1, team2, inter, length=None, voice=None, weather_name="Sunny"):
@@ -64,7 +47,7 @@ class Game(object):
             bat_team = self.teams["home"]
 
         self.current_batter = bat_team.lineup[bat_team.lineup_position % len(bat_team.lineup)]
-        self.weather.on_choose_next_batter(self)
+        self.weather.post_choose_next_batter(self)
 
     def get_batter(self):
         if self.current_batter == None:
@@ -97,13 +80,13 @@ class Game(object):
         player_rolls["bat_stat"] = random_star_gen("batting_stars", batter)
         player_rolls["pitch_stat"] = random_star_gen("pitching_stars", pitcher)
 
-        self.weather.modify_atbat_stats(player_rolls)
+        self.weather.pre_roll(player_rolls)
 
         roll = {}
         roll["pb_system_stat"] = (random.gauss(1*math.erf((player_rolls["bat_stat"] - player_rolls["pitch_stat"])*1.5)-1.8,2.2))
         roll["hitnum"] = random.gauss(2*math.erf(player_rolls["bat_stat"]/4)-1,3)
 
-        self.weather.modify_atbat_roll(update, roll, defender)
+        self.weather.post_roll(update, roll)
 
         
         if roll["pb_system_stat"] <= 0:
@@ -157,7 +140,7 @@ class Game(object):
                 "def_stars": random_star_gen("defense_stars", self.get_pitcher())
             }
 
-            self.weather.modify_steal_stats(stats)
+            self.weather.pre_steal_roll(stats)
 
             if stats["run_stars"] >= (stats["def_stars"] - 1.5): #if baserunner isn't worse than pitcher
                 roll = random.random()
@@ -182,16 +165,20 @@ class Game(object):
             run_stat = random_star_gen("baserunning_stars", baserunner)
             def_stat = random_star_gen("defense_stars", defender)
             run_roll = random.gauss(2*math.erf((run_stat-def_stat)/4)-1,3)*config["stolen_base_success_mod"]
+            up = Update()
+            up.defender = defender
+            up.runner = baserunner
+            up.base_string = base_string[start_base + 1]
 
             if start_base == 2:
                 run_roll = run_roll * .9 #stealing third is harder
             if run_roll < 1:
                 self.get_pitcher().game_stats["outs_pitched"] += 1
                 self.outs += 1
-                results_text.append(random.choice(self.voice["steal_caught"]))
+                results_text.append(random.choice(self.voice["steal_caught"]).format(up))
             else:
                 self.bases[start_base+1] = baserunner
-                results_text.append(random.choice(self.voice["steal_success"]))
+                results_text.append(random.choice(self.voice["steal_success"]).format(up))
             self.bases[start_base] = None
             if self.outs >= 3:
                 self.flip_inning()
@@ -324,15 +311,16 @@ class Game(object):
         update.defender = defender
         update.defense_team = defense_team
         update.offense_team = offense_team
-        print(update.__dict__) # DEBUG
         text = random.choice(self.voice[update.outcome.value])
-        print(text) # DEBUG
         if isinstance(text, list):
             update.displaytext = [t.format(update) for t in text]
         else:
             update.displaytext = [text.format(update)]
 
-        self.weather.activate(self, update)
+        self.weather.post_result(self, update)
+
+        if update.text_only:
+            return update
 
         if update.outcome in [Outcome.SINGLE, Outcome.DOUBLE, Outcome.TRIPLE, Outcome.HOME_RUN, Outcome.GRAND_SLAM]: #if batter gets a hit:
             self.get_batter().game_stats["hits"] += 1
@@ -409,12 +397,9 @@ class Game(object):
         update.offense_team.lineup_position += 1 #put next batter up
         self.choose_next_batter()
 
-        self.weather.post_activate(self, update)
+        self.weather.post_plate_appearance(self, update)
 
-        if self.outs >= 3:
-            self.flip_inning()
-
-        return update #returns ab information and scores
+        return update
 
     def flip_inning(self):
         for base in self.bases.keys():
@@ -426,20 +411,18 @@ class Game(object):
         if self.random_weather_flag and self.top_of_inning:
             self.weather = random.choice(list(weather.safe_weathers().values()))(self)
 
-        self.weather.on_flip_inning(self)
+        self.weather.pre_flip_inning(self)
 
         self.choose_next_batter()
 
         if self.top_of_inning:
             self.inning += 1
-            if self.inning > self.max_innings and self.teams["home"].score != self.teams["away"].score: #game over
+            if self.inning > self.max_innings and self.teams["home"].score != self.teams["away"].score:
                 self.over = True
-                try: #if something goes wrong with OBL don't erase game
-                    if self.max_innings >= 9 or self.weather.name in ["Leaf Eddies", "Torrential Downpour"]:
-                        this_xvi_team = None
-                        db.save_obl_results(self.teams["home"] if self.teams["home"].score > self.teams["away"].score else self.teams["away"], self.teams["home"] if self.teams["home"].score < self.teams["away"].score else self.teams["away"], xvi_team=this_xvi_team)
-                except:
-                    pass
+            else:
+                text = f"End of inning {self.inning - 1}."
+                text = self.weather.modify_top_of_inning_message(self, text)
+                self.message_queue += [text]
 
     def gamestate_update_full(self):
         self.play_has_begun = True
@@ -447,6 +430,8 @@ class Game(object):
         if attempts == False:
             self.last_update = self.batterup()
             self.message_queue += self.last_update.displaytext
+            if self.outs >= 3:
+                self.flip_inning()
         else:
             self.message_queue += attempts
 

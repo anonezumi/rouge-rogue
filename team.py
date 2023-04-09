@@ -1,7 +1,7 @@
 import random, discord, jsonpickle, asyncio, math, player
 import database as db
 import onomancer as ono
-from client import client, config
+from config import client, config
 from league_storage import get_team_mods
 
 class Team(object):

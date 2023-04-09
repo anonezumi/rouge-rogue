@@ -1,6 +1,6 @@
 import discord, asyncio, team, player, game
 import database as db
-from client import client, config
+from config import client, config
 
 initialized = False
 
