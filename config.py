@@ -1,12 +1,8 @@
-import discord, os, json
-from enum import Enum
+import discord, os, json, logging, enum
 
 DATA_DIR = "data"
 
-all_voices = json.load(open("voices.json"))
-base_string = ["None", "first", "second", "third", "home"]
-
-class Outcome(Enum):
+class Outcome(enum.Enum):
     K_LOOKING = "strikeoutlooking"
     K_SWINGING = "strikeoutswinging"
     GROUNDOUT = "groundout"
@@ -22,7 +18,11 @@ class Outcome(Enum):
     HOME_RUN = "homerun"
     GRAND_SLAM = "grandslam"
 
-client = discord.Client(intents=(discord.Intents.all()))
+base_string = ["None", "first", "second", "third", "home"]
+
+logging.basicConfig(filename="rougerogue.log", encoding="utf-8", level=logging.DEBUG)
+
+client = discord.Client(intents=(discord.Intents.default()))
 config_filename = os.path.join(DATA_DIR, "config.json")
 
 if not os.path.exists(os.path.dirname(config_filename)):
@@ -30,20 +30,14 @@ if not os.path.exists(os.path.dirname(config_filename)):
 if not os.path.exists(config_filename):
     #generate default config
     config_dic = {
-            "token" : "",
-            "owners" : [
+            "token": "",
+            "owners": [
                 0000
                 ],
-            "game_freeze" : 0,
-            "default_length" : 3,
-            "stlat_weights" : {
-                    "batting_stars" : 1,
-                    "pitching_stars" : 0.8,
-                    "baserunning_stars" : 1,
-                    "defense_stars" : 1
-                },
-            "stolen_base_chance_mod" : 1,
-            "stolen_base_success_mod" : 1
+            "game_freeze": 0,
+            "default_length": 9,
+            "roll_weights": {},
+            "roll_thresholds": {}
         }
     with open(config_filename, "w") as config_file:
         json.dump(config_dic, config_file, indent=4)

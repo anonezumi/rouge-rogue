@@ -61,8 +61,8 @@ class SlightTailwind(Weather):
 
     def post_result(self, game, update):
         if not self.mulligan and update.outcome in [Outcome.K_LOOKING, Outcome.K_SWINGING, Outcome.GROUNDOUT, Outcome.FLYOUT, Outcome.FLYOUT_ADVANCE, Outcome.FIELDERS_CHOICE, Outcome.DOUBLE_PLAY, Outcome.SAC_FLY]: 
-            mulligan_roll_target = -((((update.batter.stlats["batting_stars"])-5)/6)**2)+1
-            if random.random() > mulligan_roll_target and update.batter.stlats["batting_stars"] <= 5:
+            mulligan_roll_target = -((((update.batter.stats["batting_stars"])-5)/6)**2)+1
+            if random.random() > mulligan_roll_target and update.batter.stats["batting_stars"] <= 5:
                 update.text_only = True
                 update.displaytext = f"{update.batter} would have gone out, but they took a mulligan!"
                 self.mulligan = True
@@ -142,7 +142,7 @@ class Twilight(Weather):
     error = False
 
     def post_roll(self, update, roll):
-        error_line = - (math.log(update.defender.stlats["defense_stars"] + 1)/50) + 1
+        error_line = - (math.log(update.defender.stats["defense_stars"] + 1)/50) + 1
         if random.random() > error_line:
             self.error = True
             roll["pb_system_stat"] = 0.1
@@ -249,8 +249,8 @@ class Breezy(Weather):
             teamtype = random.choice(["away","home"])
             team = game.teams[teamtype]
             player = random.choice(team.lineup)
-            player.stlats["batting_stars"] = player.stlats["pitching_stars"]
-            player.stlats["pitching_stars"] = player.stlats["baserunning_stars"]
+            player.stats["batting_stars"] = player.stats["pitching_stars"]
+            player.stats["pitching_stars"] = player.stats["baserunning_stars"]
             old_player_name = player.name
 
             if not hasattr(player, "stat_name"):
@@ -620,15 +620,3 @@ class WeatherChains():
 
     def starting_weather():
         return random.choice(WeatherChains.light + WeatherChains.magic)
-
-    def debug_weathers():
-        names = ["a.txt", "b.txt", "c.txt"]
-        for name in names:
-            current = random.choice(list(all_weathers().values()))
-            out = ""
-            for i in range(0,50):
-                out += f"{current.name} {current.emoji}\n"
-                current = WeatherChains.chain_weather(current)
-            
-            with open("data/"+name, "w", encoding='utf-8') as file:
-                file.write(out)

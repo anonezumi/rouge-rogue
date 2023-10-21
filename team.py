@@ -8,10 +8,7 @@ class Team(object):
     def __init__(self):
         self.name = None
         self.lineup = []
-        self.lineup_position = 0
         self.rotation = []
-        self.pitcher = None
-        self.score = 0
         self.slogan = None
 
     def find_player(self, name):
@@ -32,9 +29,9 @@ class Team(object):
     def average_stars(self):
         total_stars = 0
         for _player in self.lineup:
-            total_stars += _player.stlats["batting_stars"]
+            total_stars += _player.stats["batting_stars"]
         for _player in self.rotation:
-            total_stars += _player.stlats["pitching_stars"]
+            total_stars += _player.stats["pitching_stars"]
         return total_stars/(len(self.lineup) + len(self.rotation))
 
     def swap_player(self, name):
@@ -106,14 +103,6 @@ class Team(object):
         else:
             self.pitcher = temp_rotation[(rotation_slot-1) % len(temp_rotation)]
 
-    def is_ready(self):
-        try:
-            return (len(self.lineup) >= 1 and len(self.rotation) > 0)
-        except AttributeError:
-            self.rotation = [self.pitcher]
-            self.pitcher = None
-            return (len(self.lineup) >= 1 and len(self.rotation) > 0)
-
     def apply_team_mods(self, league_name):
         mod_dic = get_team_mods(league_name, self.name)
         if mod_dic != {} and mod_dic != None:
@@ -121,20 +110,6 @@ class Team(object):
                 this_player = self.find_player(player_name)[0]
                 if this_player is not None:
                     this_player.apply_mods(mod_dic[player_name])
-
-    def prepare_for_save(self):
-        self.lineup_position = 0
-        self.score = 0
-        if self.pitcher is not None and self.pitcher not in self.rotation:
-            self.rotation.append(self.pitcher)
-        self.pitcher = None
-        for this_player in self.lineup:
-            for stat in this_player.game_stats.keys():
-                this_player.game_stats[stat] = 0
-        for this_player in self.rotation:
-            for stat in this_player.game_stats.keys():
-                this_player.game_stats[stat] = 0
-        return self
 
     def finalize(self):
         if self.is_ready():

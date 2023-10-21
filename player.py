@@ -4,28 +4,13 @@ import database as db
 
 class Player(object):
     def __init__(self, json_string):
-        self.stlats = json.loads(json_string)
-        self.id = self.stlats["id"]
-        self.name = self.stlats["name"]
-        self.game_stats = {
-                            "outs_pitched" : 0,
-                            "walks_allowed" : 0,
-                            "hits_allowed" : 0,
-                            "strikeouts_given" : 0,
-                            "runs_allowed" : 0,
-                            "plate_appearances" : 0,
-                            "walks_taken" : 0,
-                            "sacrifices" : 0,
-                            "hits" : 0,
-                            "home_runs" : 0,
-                            "total_bases" : 0,
-                            "rbis" : 0,
-                            "strikeouts_taken" : 0
-            }
+        self.stats = json.loads(json_string)
+        self.id = self.stats["id"]
+        self.name = self.stats["name"]
         
     def star_string(self, key):
         str_out = ""
-        starstring = str(self.stlats[key])
+        starstring = str(self.stats[key])
         if ".5" in starstring:
             starnum = int(starstring[0])
             addhalf = True
@@ -42,7 +27,7 @@ class Player(object):
 
     def apply_mods(self, mod_dic):
         for stat in iter(mod_dic.keys()):
-            self.stlats[stat] = self.stlats[stat] + mod_dic[stat]
+            self.stats[stat] = self.stats[stat] + mod_dic[stat]
 
 @discord.app_commands.command()
 async def showplayer(inter: discord.Interaction, player_name: str):

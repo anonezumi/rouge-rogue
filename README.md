@@ -3,7 +3,7 @@
 
 Rouge Rogue is a discord based online baseball simulator inspired by Blaseball and based on [Sim16](https://github.com/Sakimori/matteo-the-prestige), every name has randomly generated stats which you can use to make custom teams and custom leagues, all set up and run in Discord!
 
-If you would like to add the bot to your server to be able to set up teams and games, [click here](https://discord.com/oauth2/authorize?client_id=807934797753483264&permissions=309506393152&scope=bot).
+If you would like to add the bot to your server to be able to set up teams and games, [click here](https://discord.com/oauth2/authorize?client_id=1094647888279244871&scope=bot&permissions=26845492071504).
 
 If you would like to chat with the devs or join the main community for the bot that can all be found in [the Discord server](https://discord.gg/hYWExS6f8D).
 

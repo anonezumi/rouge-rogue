@@ -1,0 +1,15 @@
+{
+    "help": {
+        "default": "The help command hosts a variety of information about the bot. Use /help [topic] for help on a specific topic.\nAvailable topics:\ncommands: Lists all commands. Each command also has its own help topic.\ninvite: Gives you a link to invite the bot to your server.\nserver: Gives you an invite to the official Rouge Rogue Discord server.\ngithub: Links the GitHub repository.\ncredit: Shows credits for the bot.",
+        "commands": "This is a list of all commands available to users. ALl commands are used via Discord Slash Commands. Each of these commands ~~has~~ WILL HAVE its own help topic.\n\n/saveteam\n/deleteteam\n/replaceplayer\n/addplayer\n/moveplayer\n/swapsection\n/removeplayer\n/showteam\n/searchteams\n/showallteams\n/startgame\n/randomgame\n/showplayer\n/idolize\n/showidol\n/help",
+        "invite": "Use this link to invite the bot to your server: https://discord.com/oauth2/authorize?client_id=1094647888279244871&scope=bot&permissions=26845492071504",
+        "server": "Join the official server to ask questions, report bugs, and play with others: https://discord.gg/hYWExS6f8D",
+        "github": "The GitHub repository hosts the code for the bot. Feel free to look through it, or even contribute! https://github.com/anonezumi/rouge-rogue",
+        "credits": "The original project is Sim16 by Sakimori: https://github.com/Sakimori/matteo-the-prestige \nAll the new code is by the Nezumi System (nezumi#9912). The project is licensed under the GNU General Public License 3.0.\n\nThe Rouge Rogue logo was made by Krazz (krazz#2209).\n\n\"The New Guy\" voice contributed by Callie (callibones#1796)."
+    },
+    "error": {
+        "help": {
+            "invalid_topic": "Invalid topic. Use /help to see a list of available topics."
+        }
+    }
+}

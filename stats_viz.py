@@ -6,15 +6,21 @@ import numpy as np
 
 RAND_RESOLUTION = 10000
 SM_RESOLUTION = 1000
-u = np.linspace(0, 1, RAND_RESOLUTION)
-small_lins = np.linspace(0, 1, SM_RESOLUTION)
+dist = np.linspace(np.nextafter(0, 1), 1, RAND_RESOLUTION)
+sample = np.linspace(-3, 3, SM_RESOLUTION)
+# lines = np.linspace(0.1, 0.9, 9)
+data = np.zeros((SM_RESOLUTION, 2))
 
-#batting = ((1 - u) ** 0.01) * ((1 - u) ** 0.05) * ((u * u) ** 0.35) * ((u * u) ** 0.075) * (u ** 0.02)
-#pitching = (u ** 0.5) * (u ** 0.4) * (u ** 0.15) * (u ** 0.1) * (u ** 0.025)
-baserunning = [np.mean((s ** 0.5) * ((u * u * u * u) ** 0.1)) for s in small_lins]
-#defense = [np.mean(((u * u) ** 0.2) * ((s * u * u) ** 0.1)) for s in small_lins]
+for i in range(SM_RESOLUTION):
+    w = sample[i]
+    if w < 0:
+        w = -w
+        mod_dist = np.flip(1 - (1 / ((1 / dist) + w) * (1 + w)))
+    else:
+        mod_dist = 1 / ((1 / dist) + w) * (1 + w)
+    # data[i] = 1 - (np.searchsorted(mod_dist, lines) / RAND_RESOLUTION)
+    data[i] = [np.mean(mod_dist), np.std(mod_dist)]
 
-# ax = sns.displot(pitching, bins=200)
-sns.lineplot(baserunning)
+sns.relplot(data=data, kind="line")
 
 plt.show()

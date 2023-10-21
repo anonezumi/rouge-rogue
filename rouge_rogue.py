@@ -1,4 +1,4 @@
-import discord, asyncio, team, player, game
+import discord, asyncio, team, player, game, text
 import database as db
 from config import client, config
 
@@ -10,7 +10,7 @@ async def on_ready():
     db.initialcheck()
     print(f"logged in as {client.user} to {len(client.guilds)} servers")
     commandtree = discord.app_commands.CommandTree(client)
-    command_modules = [team, player, game]
+    command_modules = [team, player, game, text]
     for cm in command_modules:
         for command in cm.COMMANDS:
             commandtree.add_command(command)
